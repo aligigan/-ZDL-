@@ -1,0 +1,96 @@
+#compdef zdl
+# zsh completion for zdl
+# install: copy to a directory in $fpath as _zdl, then run compinit
+
+_zdl() {
+    local -a commands
+    commands=(
+        'ui:open the full-screen dashboard'
+        'get:download one or more URLs'
+        'resume:continue a partial download'
+        'clip:watch the clipboard for file links'
+        'list:show resumable downloads'
+        'info:show saved state for a download'
+        'clean:delete a partial download and its state'
+        'version:print version'
+        'help:show usage'
+    )
+
+    local -a common
+    common=(
+        '-o[final filename/path]:file:_files'
+        '--output[final filename/path]:file:_files'
+        '-d[download directory]:dir:_files -/'
+        '--dir[download directory]:dir:_files -/'
+        '-x[parallel connections 1-64]:n:'
+        '--connections[parallel connections 1-64]:n:'
+        '--retries[retries per chunk]:n:'
+        '--cookie[Cookie header value]:cookie:'
+        '--cookies-from-zen[read cookies from Zen]'
+        '--zen-profile[Zen profile directory]:dir:_files -/'
+        '--referer[Referer header]:url:'
+        '--user-agent[User-Agent header]:ua:'
+        '*--header[extra header]:header:'
+        '--rate[speed limit, e.g. 8M]:rate:'
+        '--sha256[expected sha256]:hex:'
+        '--insecure[skip TLS verification]'
+        '(-y --yes)'{-y,--yes}'[skip the start/cancel prompt]'
+        '--force[overwrite/accept changes]'
+        '--restart[discard saved progress]'
+        '(-q --quiet)'{-q,--quiet}'[no live progress]'
+        '--verbose[print probe details]'
+        '--notify[desktop notification when finished]'
+    )
+
+    local -a uiflags
+    uiflags=(
+        '-d[download directory]:dir:_files -/'
+        '--dir[download directory]:dir:_files -/'
+        '-x[parallel connections 1-64]:n:'
+        '--connections[parallel connections 1-64]:n:'
+        '--retries[retries per chunk]:n:'
+        '--cookie[Cookie header value]:cookie:'
+        '--cookies-from-zen[read cookies from Zen]'
+        '--zen-profile[Zen profile directory]:dir:_files -/'
+        '--referer[Referer header]:url:'
+        '--user-agent[User-Agent header]:ua:'
+        '*--header[extra header]:header:'
+        '--rate[speed limit, e.g. 8M]:rate:'
+        '--insecure[skip TLS verification]'
+        '(-y --yes)'{-y,--yes}'[skip prompts]'
+        '(-q --quiet)'{-q,--quiet}'[no live progress]'
+        '--verbose[print probe details]'
+        '--notify[desktop notification when finished]'
+    )
+
+    if (( CURRENT == 2 )); then
+        _describe 'command' commands
+        return
+    fi
+
+    case "$words[2]" in
+        ui)
+            _arguments $uiflags
+            ;;
+        get)
+            _arguments $common '*:url:'
+            ;;
+        resume)
+            _arguments $common '--url[fresh URL for the same file]:url:' '*:file:_files'
+            ;;
+        clip)
+            _arguments $common '--auto[download detected files automatically]'
+            ;;
+        list)
+            _arguments '-d[directory to scan]:dir:_files -/' '--dir[directory to scan]:dir:_files -/'
+            ;;
+        info|clean)
+            _arguments '*:file:_files'
+            ;;
+        *)
+            _describe 'command' commands
+            ;;
+    esac
+}
+
+_zdl "$@"

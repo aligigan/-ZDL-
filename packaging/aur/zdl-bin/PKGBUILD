@@ -1,0 +1,37 @@
+# Maintainer: Ali Gigan <aligigan@users.noreply.github.com>
+pkgname=zdl-bin
+pkgver=0.2.0
+pkgrel=1
+pkgdesc="Terminal IDM-style parallel downloader for Zen Browser files"
+arch=('x86_64' 'aarch64')
+url="https://github.com/aligigan/zdl"
+license=('GPL-3.0-or-later')
+provides=('zdl')
+conflicts=('zdl' 'zdl-git')
+depends=()
+optdepends=(
+	'xclip: clipboard watcher on X11'
+	'wl-clipboard: clipboard watcher on Wayland'
+	'libnotify: desktop notifications with --notify'
+)
+options=('!debug' '!strip')
+source_x86_64=("${url}/releases/download/v${pkgver}/zdl_${pkgver}_linux_amd64.tar.gz")
+source_aarch64=("${url}/releases/download/v${pkgver}/zdl_${pkgver}_linux_arm64.tar.gz")
+sha256sums_x86_64=('ed6e9b7ff49f2c02d1c36625c3bc5b194234d61296c1cc7c72b416f4f0156de0')
+sha256sums_aarch64=('11ab967e836851d1a66d7c20aa82b8ad47d1bf1d90f78e1f73b3884c25c54105')
+
+package() {
+	local _archdir
+	case "$CARCH" in
+		x86_64) _archdir=amd64 ;;
+		aarch64) _archdir=arm64 ;;
+	esac
+	local _src="$srcdir/zdl_${pkgver}_linux_${_archdir}"
+
+	install -Dm755 "$_src/zdl" "$pkgdir/usr/bin/zdl"
+	install -Dm644 "$_src/README.md" "$pkgdir/usr/share/doc/$pkgname/README.md"
+	install -Dm644 "$_src/CHANGELOG.md" "$pkgdir/usr/share/doc/$pkgname/CHANGELOG.md"
+	install -Dm644 "$_src/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+	install -Dm644 "$_src/completions/zdl.bash" "$pkgdir/usr/share/bash-completion/completions/zdl"
+	install -Dm644 "$_src/completions/_zdl" "$pkgdir/usr/share/zsh/site-functions/_zdl"
+}

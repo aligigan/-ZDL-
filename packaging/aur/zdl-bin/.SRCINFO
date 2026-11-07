@@ -1,0 +1,22 @@
+pkgbase = zdl-bin
+	pkgdesc = Terminal IDM-style parallel downloader for Zen Browser files
+	pkgver = 0.2.0
+	pkgrel = 1
+	url = https://github.com/aligigan/zdl
+	arch = x86_64
+	arch = aarch64
+	license = GPL-3.0-or-later
+	optdepends = xclip: clipboard watcher on X11
+	optdepends = wl-clipboard: clipboard watcher on Wayland
+	optdepends = libnotify: desktop notifications with --notify
+	provides = zdl
+	conflicts = zdl
+	conflicts = zdl-git
+	options = !debug
+	options = !strip
+	source_x86_64 = https://github.com/aligigan/zdl/releases/download/v0.2.0/zdl_0.2.0_linux_amd64.tar.gz
+	sha256sums_x86_64 = ed6e9b7ff49f2c02d1c36625c3bc5b194234d61296c1cc7c72b416f4f0156de0
+	source_aarch64 = https://github.com/aligigan/zdl/releases/download/v0.2.0/zdl_0.2.0_linux_arm64.tar.gz
+	sha256sums_aarch64 = 11ab967e836851d1a66d7c20aa82b8ad47d1bf1d90f78e1f73b3884c25c54105
+
+pkgname = zdl-bin
